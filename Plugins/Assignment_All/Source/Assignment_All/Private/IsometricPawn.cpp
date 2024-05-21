@@ -19,6 +19,7 @@ AIsometricPawn::AIsometricPawn()
 void AIsometricPawn::BeginPlay()
 {
 	Super::BeginPlay();
+	TargetYaw = 45;
 }
 
 void AIsometricPawn::Tick(float DeltaTime)
