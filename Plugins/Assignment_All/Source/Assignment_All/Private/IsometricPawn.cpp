@@ -25,11 +25,15 @@ void AIsometricPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	float CurrentYaw = SpringArmComponent->GetRelativeRotation().Yaw;
-	float NewYaw = FMath::FInterpTo(CurrentYaw, TargetYaw, DeltaTime, RotationSpeed);
+	//float CurrentYaw = SpringArmComponent->GetRelativeRotation().Yaw;
+	//float NewYaw = FMath::FInterpTo(CurrentYaw, TargetYaw, DeltaTime, RotationSpeed);
 
-	FRotator NewRelativeRotation = FRotator(SpringArmComponent->GetRelativeRotation().Pitch, NewYaw, SpringArmComponent->GetRelativeRotation().Roll);
-	SpringArmComponent->SetRelativeRotation(NewRelativeRotation);
+	//FRotator NewRelativeRotation = FRotator(SpringArmComponent->GetRelativeRotation().Pitch, NewYaw, SpringArmComponent->GetRelativeRotation().Roll);
+	//SpringArmComponent->SetRelativeRotation(NewRelativeRotation);
+
+	FRotator CurrentRotation = SpringArmComponent->GetRelativeRotation();
+	FRotator TargetRotation = FRotator(CurrentRotation.Pitch, TargetYaw, CurrentRotation.Roll);
+	SpringArmComponent->SetRelativeRotation(FMath::Lerp(CurrentRotation, TargetRotation, DeltaTime));
 
 }
 
