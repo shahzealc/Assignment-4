@@ -10,7 +10,7 @@ public class Assignment : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","Assignment_1_2", "EnhancedInput", "HeadMountedDisplay", "NavigationSystem", "AIModule", "Niagara" });
 
-        PublicIncludePaths.AddRange(new string[] { "C:\\Program Files\\Epic Games\\UE_5.2\\Engine\\Plugins\\EnhancedInput\\Source\\EnhancedInput\\Public" });
+        //PublicIncludePaths.AddRange(new string[] { "C:\\Program Files\\Epic Games\\UE_5.2\\Engine\\Plugins\\EnhancedInput\\Source\\EnhancedInput\\Public" });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
 
