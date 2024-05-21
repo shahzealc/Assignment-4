@@ -404,15 +404,6 @@ void AInteractiveArchController::SpawnCamera(bool ChangeCameraType)
 
 					CurrentlySpawnedCamera= SpawnedPawn;
 
-					if (RowData->CharacterType == ECameraType::Orthographic) {
-						GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString("Orthographic Camera Spawned"));
-					}
-					else if (RowData->CharacterType == ECameraType::Isometric) {
-						GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString("Isometric Camera Spawned"));
-					}
-					else {
-						GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString("Perspective Camera Spawned"));
-					}
 				}
 				else
 				{
