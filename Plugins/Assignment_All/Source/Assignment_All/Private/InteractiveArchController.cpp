@@ -45,7 +45,7 @@ void AInteractiveArchController::SetupInputComponentMeshGenerator()
 
 		EIC->BindAction(LeftClick, ETriggerEvent::Completed, this, &AInteractiveArchController::GetLocation);
 		EIC->BindAction(TabClick, ETriggerEvent::Completed, this, &AInteractiveArchController::HideWidget);
-		EIC->BindAction(CameraSpawn, ETriggerEvent::Completed, this, &AInteractiveArchController::SpawnCamera,true);
+		EIC->BindAction(CameraSpawn, ETriggerEvent::Completed, this, &AInteractiveArchController::SpawnCamera, true);
 
 		UEnhancedInputLocalPlayerSubsystem* Subsystem = GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
 
@@ -212,7 +212,7 @@ void AInteractiveArchController::SetupInputComponentWallBuilder()
 	EIC->BindAction(MouseLeftClick, ETriggerEvent::Completed, this, &AInteractiveArchController::MouseLeftClickLocation);
 	EIC->BindAction(MouseRightClick, ETriggerEvent::Completed, this, &AInteractiveArchController::MouseRightClickNewWallCreation);
 	EIC->BindAction(ZClick, ETriggerEvent::Completed, this, &AInteractiveArchController::UndoConstruction);
-	EIC->BindAction(CameraSpawn, ETriggerEvent::Completed, this, &AInteractiveArchController::SpawnCamera,true);
+	EIC->BindAction(CameraSpawn, ETriggerEvent::Completed, this, &AInteractiveArchController::SpawnCamera, true);
 
 	ULocalPlayer* LocalPlayer = GetLocalPlayer();
 	check(LocalPlayer);
@@ -367,7 +367,7 @@ void AInteractiveArchController::SpawnCamera(bool ChangeCameraType)
 	{
 		CurrentlySpawnedCamera->Destroy();
 		CurrentlySpawnedCamera = nullptr;
-		if(ChangeCameraType)
+		if (ChangeCameraType)
 			CurrentCameraIndex++;
 	}
 
@@ -402,27 +402,12 @@ void AInteractiveArchController::SpawnCamera(bool ChangeCameraType)
 				{
 					Possess(SpawnedPawn);
 
-					CurrentlySpawnedCamera= SpawnedPawn;
+					CurrentlySpawnedCamera = SpawnedPawn;
 
 				}
-				else
-				{
-					GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString("Failed to spawn actor"));
-				}
-			}
-			else
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString("Character class to spawn is invalid"));
 			}
 		}
-		else
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString("Failed to find row data in DataTable"));
-		}
 	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString("Failed to load DataTable"));
-	}
+
 	SetupInputComponent();
 }
