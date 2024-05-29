@@ -13,7 +13,7 @@ APerspectivePawn::APerspectivePawn()
 	SpringArmComponent->SetupAttachment(RootComponent);
 	SpringArmComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
 	SpringArmComponent->bUsePawnControlRotation = true;
-	SpringArmComponent->TargetArmLength = 800.f;
+	SpringArmComponent->TargetArmLength = 50.f;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
