@@ -3,7 +3,6 @@
 
 #include "VerticalRailActor.h"
 
-// Sets default values
 AVerticalRailActor::AVerticalRailActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -63,7 +62,6 @@ void AVerticalRailActor::OnConstruction(const FTransform& Transform)
 	
 	GenerateTopHorizontalRailingMesh();
 	GenerateBottomHorizontalRailingMesh();
-
 }
 
 void AVerticalRailActor::GenerateVerticalRail() {
@@ -875,139 +873,6 @@ void AVerticalRailActor::GenerateRoundedOverTop(float Radius, int32 Segments, in
 		Triangles.Add(firstOfLastRing + s);
 	}
 
-	VerticalRailingMesh->CreateMeshSection_LinearColor(5, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
-	VerticalRailingMesh->SetMaterial(5, RoundedOverTopMaterial);
-
-}
-
-void AVerticalRailActor::GenerateSemiCapsule()
-{
-	const int32 NumSides = 16; // Number of sides for the cylinder part
-	const float Radius = 50.0f; // Radius of the cylinder and hemishpere
-	const float CylinderHeight = 100.0f; // Height of the cylinder part
-	const float HemisphereHeight = Radius; // Height of the hemisphere part
-
-	TArray<FVector> Vertices;
-	TArray<int32> Triangles;
-	TArray<FVector> Normals;
-	TArray<FVector2D> UVs;
-	TArray<FProcMeshTangent> Tangents;
-	TArray<FLinearColor> Colors;
-
-	Colors.Add(FLinearColor(1, 1, 1, 1));
-
-	// Generate vertices for the cylinder part
-	for (int32 SideIndex = 0; SideIndex < NumSides; SideIndex++)
-	{
-		const float Angle = static_cast<float>(SideIndex) * PI * 2.0f / static_cast<float>(NumSides);
-		const FVector2D SideXY = FVector2D(FMath::Cos(Angle), FMath::Sin(Angle));
-
-		// Bottom vertex
-		Vertices.Add(FVector(SideXY.X * Radius, SideXY.Y * Radius, 0.0f));
-
-		// Top vertex
-		Vertices.Add(FVector(SideXY.X * Radius, SideXY.Y * Radius, CylinderHeight));
-	}
-
-	// Generate vertices for the hemisphere part
-	const int32 NumRings = 8; // Number of rings for the hemisphere
-	for (int32 RingIndex = 0; RingIndex < NumRings; RingIndex++)
-	{
-		const float Angle = static_cast<float>(RingIndex) * PI / static_cast<float>(NumRings - 1);
-		const float ZOffset = FMath::Cos(Angle) * Radius;
-		const float RingRadius = FMath::Sin(Angle) * Radius;
-
-		for (int32 SideIndex = 0; SideIndex < NumSides; SideIndex++)
-		{
-			const float SideAngle = static_cast<float>(SideIndex) * PI * 2.0f / static_cast<float>(NumSides);
-			const FVector2D SideXY = FVector2D(FMath::Cos(SideAngle), FMath::Sin(SideAngle));
-
-			Vertices.Add(FVector(SideXY.X * RingRadius, SideXY.Y * RingRadius, ZOffset + CylinderHeight));
-		}
-	}
-
-	// Add the top vertex
-	Vertices.Add(FVector(0.0f, 0.0f, Radius + CylinderHeight));
-
-	// Generate triangles for the cylinder part
-	for (int32 SideIndex = 0; SideIndex < NumSides; SideIndex++)
-	{
-		const int32 NextSideIndex = (SideIndex + 1) % NumSides;
-
-		// Bottom cap triangle
-		Triangles.Add(SideIndex);
-		Triangles.Add(NextSideIndex);
-		Triangles.Add(NumSides);
-
-		// Top cap triangle
-		Triangles.Add(NumSides + SideIndex);
-		Triangles.Add(NumSides + NextSideIndex);
-		Triangles.Add(NumSides + NumSides);
-
-		// Side rectangles
-		Triangles.Add(SideIndex);
-		Triangles.Add(NumSides + SideIndex);
-		Triangles.Add(NextSideIndex);
-
-		Triangles.Add(NextSideIndex);
-		Triangles.Add(NumSides + SideIndex);
-		Triangles.Add(NumSides + NextSideIndex);
-	}
-
-	// Generate triangles for the hemisphere part
-	int32 VertexOffset = NumSides * 2;
-	for (int32 RingIndex = 0; RingIndex < NumRings - 1; RingIndex++)
-	{
-		for (int32 SideIndex = 0; SideIndex < NumSides; SideIndex++)
-		{
-			const int32 NextSideIndex = (SideIndex + 1) % NumSides;
-
-			Triangles.Add(VertexOffset + SideIndex);
-			Triangles.Add(VertexOffset + NextSideIndex);
-			Triangles.Add(VertexOffset + SideIndex + NumSides);
-
-			Triangles.Add(VertexOffset + NextSideIndex);
-			Triangles.Add(VertexOffset + NextSideIndex + NumSides);
-			Triangles.Add(VertexOffset + SideIndex + NumSides);
-		}
-
-		VertexOffset += NumSides;
-	}
-
-	// Generate the top cap triangles
-	const int32 TopCapVertexIndex = Vertices.Num() - 1;
-	VertexOffset = Vertices.Num() - NumSides - 1;
-	for (int32 SideIndex = 0; SideIndex < NumSides; SideIndex++)
-	{
-		Triangles.Add(TopCapVertexIndex);
-		Triangles.Add(VertexOffset + SideIndex);
-		Triangles.Add(VertexOffset + ((SideIndex + 1) % NumSides));
-	}
-
-	// Generate normals and UVs
-	Normals.SetNumUninitialized(Vertices.Num());
-	UVs.SetNumUninitialized(Vertices.Num());
-	Tangents.SetNumUninitialized(Vertices.Num());
-
-	// Calculate normals and UVs
-	for (int32 i = 0; i < Triangles.Num(); i += 3)
-	{
-		FVector Edge1 = Vertices[Triangles[i + 1]] - Vertices[Triangles[i]];
-		FVector Edge2 = Vertices[Triangles[i + 2]] - Vertices[Triangles[i]];
-		FVector Normal = FVector::CrossProduct(Edge2, Edge1).GetSafeNormal();
-
-		Normals[Triangles[i]] = Normal;
-		Normals[Triangles[i + 1]] = Normal;
-		Normals[Triangles[i + 2]] = Normal;
-	}
-
-	for (int32 i = 0; i < Vertices.Num(); ++i)
-	{
-		UVs[i] = FVector2D(0, 0);
-		Tangents[i] = FProcMeshTangent(0, 1, 0);
-	}
-
-	// Update the mesh data arrays
 	VerticalRailingMesh->CreateMeshSection_LinearColor(5, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
 	VerticalRailingMesh->SetMaterial(5, RoundedOverTopMaterial);
 

@@ -26,12 +26,6 @@ void AIsometricPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//float CurrentYaw = SpringArmComponent->GetRelativeRotation().Yaw;
-	//float NewYaw = FMath::FInterpTo(CurrentYaw, TargetYaw, DeltaTime, RotationSpeed);
-
-	//FRotator NewRelativeRotation = FRotator(SpringArmComponent->GetRelativeRotation().Pitch, NewYaw, SpringArmComponent->GetRelativeRotation().Roll);
-	//SpringArmComponent->SetRelativeRotation(NewRelativeRotation);
-
 	FRotator CurrentRotation = SpringArmComponent->GetRelativeRotation();
 	FRotator TargetRotation = FRotator(CurrentRotation.Pitch, TargetYaw, CurrentRotation.Roll);
 	SpringArmComponent->SetRelativeRotation(FMath::Lerp(CurrentRotation, TargetRotation, DeltaTime));
@@ -105,6 +99,7 @@ void AIsometricPawn::RotateCameraCounterClockwise() {
 		TargetYaw -= 360.0f;
 	}
 }
+
 void AIsometricPawn::RotateCameraClockwise() {
 	//SpringArmComponent->AddRelativeRotation(FRotator(0.0f, -RotationAngleIncrement, 0.0f));
 	TargetYaw -= RotationAngleIncrement;

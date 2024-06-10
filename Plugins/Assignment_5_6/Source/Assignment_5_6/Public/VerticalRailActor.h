@@ -9,7 +9,6 @@
 #include "VerticalRailActor.generated.h"
 
 UENUM()
-
 enum class ERailingType {
 	Simple,
 	Pyramid,
@@ -104,15 +103,13 @@ public:
 
 	void GenerateRoundedOverTop(float Radius, int32 Segments, int32 Rings);
 
-	void GenerateSemiCapsule();
-
-	void SetVerticalMaterial(int segment,UMaterialInterface* Material);
-
 	//Stand
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Materials | Stand Material")
 	UMaterialInterface* StandMaterial;
 
 	void GenerateStand(FVector Location, float BaseRadius, float Height1, float RimRadius, float CurvatureFactor, int NumSlices, int NumStacks);
+
+	void SetVerticalMaterial(int segment,UMaterialInterface* Material);
 
 protected:
 

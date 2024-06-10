@@ -74,14 +74,8 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Fence Material")
     UMaterialInterface* FenceMaterial;
 
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Fence Material")
-    UMaterialInterface* HorizontalFenceMaterial;
-
     UPROPERTY(VisibleAnywhere)
     UProceduralMeshComponent* TopHorizontalRailingMesh;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Materials | TopHorizontal Railing Material")
-    UMaterialInterface* TopHorizontalRailingMaterial;
 
     UPROPERTY()
     float TileX;

@@ -2,6 +2,7 @@
 
 
 #include "FenceMeshActor.h"
+#include "DrawDebugHelpers.h"
 
 AFenceMeshActor::AFenceMeshActor()
 {
@@ -55,6 +56,7 @@ void AFenceMeshActor::OnConstruction(const FTransform& Transform)
 	}
 
 	GenerateStaticFence();
+
 }
 
 void AFenceMeshActor::DestroyConstructionMesh() {
@@ -98,14 +100,12 @@ void AFenceMeshActor::GenerateStaticFence()
 		{
 			SplineMeshComponent->SetMobility(EComponentMobility::Movable);
 			SplineMeshComponent->SetStaticMesh(VerticalRailStaticMesh);
-			SplineMeshComponent->SetWorldLocationAndRotation(Location, Rotation);
+			SplineMeshComponent->SetRelativeLocationAndRotation(Location, Rotation);
 			SplineMeshComponent->RegisterComponentWithWorld(GetWorld());
 			SplineMeshComponent->SetRelativeScale3D({ FenceProperties.Length / 10,FenceProperties.Width / 10,FenceProperties.Height / 10 });
 
 			SplineMeshComponent->SetMaterial(0, FenceMaterial);
-			SplineMeshComponent->SetMaterial(1, HorizontalFenceMaterial);
-			SplineMeshComponent->SetMaterial(2, HorizontalFenceMaterial);
-	
+
 			AttachedVerticalMesh.Add(SplineMeshComponent);
 		}
 	}
@@ -172,4 +172,4 @@ void AFenceMeshActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
+} 
