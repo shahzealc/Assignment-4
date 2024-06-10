@@ -32,6 +32,20 @@ void AMeshGenerator::BeginPlay()
 
 }
 
+void AMeshGenerator::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	if (AsyncScatterTask)
+	{
+		if (!AsyncScatterTask->IsDone()) {
+			AsyncScatterTask->EnsureCompletion();
+
+		}
+		delete AsyncScatterTask;
+		AsyncScatterTask = nullptr;
+	}
+}
+
 // Called every frame
 void AMeshGenerator::Tick(float DeltaTime)
 {
@@ -75,6 +89,7 @@ void AMeshGenerator::AddInstances(UStaticMesh* StaticMesh, const TArray<FTransfo
 				AsyncTask(ENamedThreads::GameThread, [this, HISMCPtr, StaticMesh, Transforms]()
 					{
 						(*HISMCPtr)->AddInstances(Transforms, false);
+
 					});
 			}
 			else
